@@ -62,19 +62,15 @@
             </select>
             </div>
 
-            <div class="space-x-4">
-    <!-- Add Task Button -->
-    <button
-      class="px-6 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all">
-      Add Task
-    </button>
 
-    <!-- Sample Button -->
-    <button
-      class="px-6 py-4 bg-white text-gray-800 font-medium rounded-lg border border-gray-300 shadow hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-200 transition-all">
-      Sample
-    </button>
-  </div>
+<!-- Add Task -->
+         <div class="md:col-span-2 flex gap-2 mt-2">
+          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Task</button>
+
+
+          <!-- Import sample  -->
+          <button type="button" id="btnImportSample" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Import Sample</button>
+        </div>   
         </form>
       </div>
 
@@ -127,6 +123,56 @@
 </div>
 </div>
 
+
+<!-- Task List -->
+<div id="taskList" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+</div>
+</section>
+</div>
+
+<!-- Optional: Modal for editing tasks -->
+<div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black/50 hidden">
+  <div class="bg-white w-full max-w-lg p-6 rounded shadow">
+    <h3 class="text-xl font-semibold mb-4">Edit Task</h3>
+    <form id="editForm" class="space-y-3">
+      <input id="editId" type="hidden" />
+      <div>
+        <label class="text-sm">Title</label>
+        <input id="editTitle" class="w-full mt-1 p-2 border rounded" />
+      </div>
+      <div>
+        <label class="text-sm">Description</label>
+        <textarea id="editDescription" class="w-full mt-1 p-2 border rounded" rows="3"></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-sm">Due date</label>
+          <input id="editDueDate" type="date" class="w-full mt-1 p-2 border rounded" />
+        </div>
+        <div>
+          <label class="text-sm">Assignee</label>
+          <input id="editAssignee" class="w-full mt-1 p-2 border rounded" />
+        </div>
+      </div>
+      <div>
+        <label class="text-sm">Tags</label>
+        <input id="editTags" class="w-full mt-1 p-2 border rounded" placeholder="comma separated" />
+      </div>
+      <div>
+        <label class="text-sm">Status</label>
+        <select id="editStatus" class="w-full mt-1 p-2 border rounded">
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Done">Done</option>
+        </select>
+      </div>
+      <div class="flex gap-2 mt-2 justify-end">
+        <button type="button" onclick="closeEditModal()" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancel</button>
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 
 
