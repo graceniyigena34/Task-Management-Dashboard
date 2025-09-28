@@ -68,6 +68,46 @@
         </form>
       </div>
 
+      <!-- Right: Dashboard -->
+<div class="md:col-span-3">
+<div class="bg-white p-4 rounded-lg shadow mb-6">
+<div class="flex items-center justify-between">
+<div class="flex gap-4 items-center">
+<input id="search" placeholder="Search title, description, tags..." class="p-2 border rounded w-72" />
+<select id="filterStatus" class="p-2 border rounded">
+    <option value="All">All</option>
+    <option value="Pending">Pending</option>
+    <option value="In Progress">In Progress</option>
+    <option value="Done">Done</option>
+</select>
+
+<select id="sortBy" class="p-2 border rounded">
+    <option value="created_desc">Newest</option>
+    <option value="due_asc">Due soon</option>
+    <option value="title_asc">Title A→Z</option>
+</select>
+
+</div>
+<div class="text-sm text-gray-600">Tasks: <span id="totalCount">0</span></div>
+</div>
+
+
+<!-- Analytics -->
+<div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="p-3 border rounded">
+<div class="text-xs text-gray-500">Completed</div>
+<div id="countDone" class="text-xl font-semibold">0</div>
+</div>
+<div class="p-3 border rounded">
+<div class="text-xs text-gray-500">In Progress</div>
+<div id="countInProgress" class="text-xl font-semibold">0</div>
+</div>
+<div class="p-3 border rounded">
+<div class="text-xs text-gray-500">Pending</div>
+<div id="countPending" class="text-xl font-semibold">0</div>
+</div>
+</div>
+
             </form>
 
         </form>
