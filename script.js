@@ -1,4 +1,4 @@
-// ===== SELECT ELEMENTS =====
+// // ===== SELECT ELEMENTS =====
 const taskForm = document.getElementById("taskForm");
 const titleInput = document.getElementById("title");
 const descriptionInput = document.getElementById("description");
@@ -47,7 +47,7 @@ function renderTasks() {
   }
 
   // Create task cards
-  filtered.forEach((task, index) => {
+  filtered.forEach(task => {
     const div = document.createElement("div");
     div.className =
       "p-4 bg-white rounded shadow border-l-4 " +
@@ -60,20 +60,18 @@ function renderTasks() {
     div.innerHTML = `
       <div class="flex justify-between items-center mb-2">
         <h3 class="text-lg font-semibold">${task.title}</h3>
-        <select onchange="updateStatus(${index}, this.value)" class="p-1 border rounded text-sm">
+        <select onchange="updateStatus('${task.id}', this.value)" class="p-1 border rounded text-sm">
           <option ${task.status === "Pending" ? "selected" : ""}>Pending</option>
           <option ${task.status === "In Progress" ? "selected" : ""}>In Progress</option>
           <option ${task.status === "Done" ? "selected" : ""}>Done</option>
         </select>
       </div>
       <p class="text-sm text-gray-600 mb-2">${task.description || "No description"}</p>
-      <div class="text-xs text-gray-500 mb-2">📅 Due: ${task.dueDate || "No due date"} | 👤 ${
-      task.assignee || "Unassigned"
-    }</div>
+      <div class="text-xs text-gray-500 mb-2">📅 Due: ${task.dueDate || "No due date"} | 👤 ${task.assignee || "Unassigned"}</div>
       <div class="text-xs text-blue-600 mb-2">🏷️ ${task.tags.join(", ")}</div>
       <div class="flex gap-2">
-        <button onclick="editTask(${index})" class="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Edit</button>
-        <button onclick="deleteTask(${index})" class="text-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+        <button onclick="editTask('${task.id}')" class="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Edit</button>
+        <button onclick="deleteTask('${task.id}')" class="text-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
       </div>
     `;
     taskList.appendChild(div);
@@ -83,126 +81,45 @@ function renderTasks() {
 }
 
 // ===== ADD TASK =====
-taskForm.addEventListener("submit", (e) => {
+taskForm.addEventListener("submit", e => {
   e.preventDefault();
-
   const newTask = {
+    id: Date.now().toString(),
     title: titleInput.value.trim(),
     description: descriptionInput.value.trim(),
     dueDate: dueDateInput.value,
     assignee: assigneeInput.value.trim(),
     tags: tagsInput.value.split(",").map(t => t.trim()).filter(Boolean),
     status: statusInput.value,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toISOString()
   };
-
-  if (!newTask.title) {
-    alert("Title is required!");
-    return;
-  }
-
+  if (!newTask.title) return alert("Title is required!");
   tasks.push(newTask);
   saveTasks();
   taskForm.reset();
   renderTasks();
 });
 
-// ===== EDIT TASK =====
-window.editTask = (index) => {
-  const task = tasks[index];
-  titleInput.value = task.title;
-  descriptionInput.value = task.description;
-  dueDateInput.value = task.dueDate;
-  assigneeInput.value = task.assignee;
-  tagsInput.value = task.tags.join(", ");
-  statusInput.value = task.status;
-
-  tasks.splice(index, 1);
-  saveTasks();
-  renderTasks();
-};
-
 // ===== DELETE TASK =====
-window.deleteTask = (index) => {
+window.deleteTask = id => {
   if (confirm("Delete this task?")) {
-    tasks.splice(index, 1);
+    tasks = tasks.filter(t => t.id !== id);
     saveTasks();
     renderTasks();
   }
 };
 
 // ===== UPDATE STATUS =====
-window.updateStatus = (index, newStatus) => {
-  tasks[index].status = newStatus;
-  saveTasks();
-  renderTasks();
-};
-
-// ===== CLEAR ALL =====
-btnClear.addEventListener("click", () => {
-  if (confirm("Clear all tasks?")) {
-    tasks = [];
+window.updateStatus = (id, newStatus) => {
+  const task = tasks.find(t => t.id === id);
+  if (task) {
+    task.status = newStatus;
     saveTasks();
     renderTasks();
   }
-});
+};
 
-// ===== SAMPLE TASKS =====
-btnImportSample.addEventListener("click", () => {
-  tasks = [
-    {
-      title: "Design Login Page",
-      description: "Create UI for login page using Tailwind.",
-      dueDate: "2025-10-05",
-      assignee: "Alice",
-      tags: ["UI", "Frontend"],
-      status: "In Progress",
-      createdAt: new Date().toISOString(),
-    },
-    {
-      title: "Fix API Bug",
-      description: "Resolve 500 error in GET /tasks endpoint.",
-      dueDate: "2025-10-10",
-      assignee: "Bob",
-      tags: ["Backend", "Bug"],
-      status: "Pending",
-      createdAt: new Date().toISOString(),
-    },
-  ];
-  saveTasks();
-  renderTasks();
-});
-
-// ===== SAVE TASKS =====
-function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-// ===== ANALYTICS =====
-function updateAnalytics() {
-  const total = tasks.length;
-  const done = tasks.filter(t => t.status === "Done").length;
-  const inProgress = tasks.filter(t => t.status === "In Progress").length;
-  const pending = tasks.filter(t => t.status === "Pending").length;
-
-  totalCount.textContent = total;
-  countDone.textContent = done;
-  countInProgress.textContent = inProgress;
-  countPending.textContent = pending;
-
-  const completion = total === 0 ? 0 : Math.round((done / total) * 100);
-  progressFill.style.width = `${completion}%`;
-}
-
-// ===== EVENT LISTENERS =====
-searchInput.addEventListener("input", renderTasks);
-filterStatus.addEventListener("change", renderTasks);
-sortBy.addEventListener("change", renderTasks);
-
-// ===== INIT =====
-renderTasks();
-
-// Select modal elements
+// ===== MODAL EDIT =====
 const editModal = document.getElementById("editModal");
 const editForm = document.getElementById("editForm");
 const editTitle = document.getElementById("editTitle");
@@ -211,12 +128,12 @@ const editDueDate = document.getElementById("editDueDate");
 const editAssignee = document.getElementById("editAssignee");
 const editTags = document.getElementById("editTags");
 const editStatus = document.getElementById("editStatus");
-let editIndex = null;
+let editId = null;
 
-// Open modal
-window.editTask = (index) => {
-  editIndex = index;
-  const task = tasks[index];
+window.editTask = id => {
+  const task = tasks.find(t => t.id === id);
+  if (!task) return;
+  editId = id;
   editTitle.value = task.title;
   editDescription.value = task.description;
   editDueDate.value = task.dueDate;
@@ -226,27 +143,28 @@ window.editTask = (index) => {
   editModal.classList.remove("hidden");
 };
 
-// Close modal
-window.closeEditModal = () => {
-  editModal.classList.add("hidden");
-};
+window.closeEditModal = () => editModal.classList.add("hidden");
 
-// Save edited task
-editForm.addEventListener("submit", (e) => {
+editForm.addEventListener("submit", e => {
   e.preventDefault();
-  if (editIndex !== null) {
-    tasks[editIndex] = {
-      title: editTitle.value.trim(),
-      description: editDescription.value.trim(),
-      dueDate: editDueDate.value,
-      assignee: editAssignee.value.trim(),
-      tags: editTags.value.split(",").map(t => t.trim()).filter(Boolean),
-      status: editStatus.value,
-      createdAt: tasks[editIndex].createdAt
-    };
-    saveTasks();
-    renderTasks();
-    closeEditModal();
-  }
+  const task = tasks.find(t => t.id === editId);
+  if (!task) return;
+  task.title = editTitle.value.trim();
+  task.description = editDescription.value.trim();
+  task.dueDate = editDueDate.value;
+  task.assignee = editAssignee.value.trim();
+  task.tags = editTags.value.split(",").map(t => t.trim()).filter(Boolean);
+  task.status = editStatus.value;
+  saveTasks();
+  renderTasks();
+  closeEditModal();
 });
 
+// ===== CLEAR ALL =====
+btnClear.addEventListener("click", () => {
+  if (confirm("Clear all tasks?")) {
+    tasks = [];
+    saveTasks();
+    renderTasks();
+  }
+});
