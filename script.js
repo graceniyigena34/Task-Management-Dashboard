@@ -201,3 +201,52 @@ sortBy.addEventListener("change", renderTasks);
 
 // ===== INIT =====
 renderTasks();
+
+// Select modal elements
+const editModal = document.getElementById("editModal");
+const editForm = document.getElementById("editForm");
+const editTitle = document.getElementById("editTitle");
+const editDescription = document.getElementById("editDescription");
+const editDueDate = document.getElementById("editDueDate");
+const editAssignee = document.getElementById("editAssignee");
+const editTags = document.getElementById("editTags");
+const editStatus = document.getElementById("editStatus");
+let editIndex = null;
+
+// Open modal
+window.editTask = (index) => {
+  editIndex = index;
+  const task = tasks[index];
+  editTitle.value = task.title;
+  editDescription.value = task.description;
+  editDueDate.value = task.dueDate;
+  editAssignee.value = task.assignee;
+  editTags.value = task.tags.join(", ");
+  editStatus.value = task.status;
+  editModal.classList.remove("hidden");
+};
+
+// Close modal
+window.closeEditModal = () => {
+  editModal.classList.add("hidden");
+};
+
+// Save edited task
+editForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (editIndex !== null) {
+    tasks[editIndex] = {
+      title: editTitle.value.trim(),
+      description: editDescription.value.trim(),
+      dueDate: editDueDate.value,
+      assignee: editAssignee.value.trim(),
+      tags: editTags.value.split(",").map(t => t.trim()).filter(Boolean),
+      status: editStatus.value,
+      createdAt: tasks[editIndex].createdAt
+    };
+    saveTasks();
+    renderTasks();
+    closeEditModal();
+  }
+});
+
