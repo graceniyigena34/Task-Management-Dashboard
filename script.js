@@ -168,3 +168,60 @@ btnClear.addEventListener("click", () => {
     renderTasks();
   }
 });
+
+// ===== SAMPLE TASKS =====
+btnImportSample.addEventListener("click", () => {
+  tasks = [
+    {
+      id: Date.now().toString() + "1",
+      title: "Design Login Page",
+      description: "Create UI for login page using Tailwind.",
+      dueDate: "2025-10-05",
+      assignee: "Alice",
+      tags: ["UI", "Frontend"],
+      status: "In Progress",
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: Date.now().toString() + "2",
+      title: "Fix API Bug",
+      description: "Resolve 500 error in GET /tasks endpoint.",
+      dueDate: "2025-10-10",
+      assignee: "Bob",
+      tags: ["Backend", "Bug"],
+      status: "Pending",
+      createdAt: new Date().toISOString()
+    }
+  ];
+  saveTasks();
+  renderTasks();
+});
+
+// ===== SAVE TASKS =====
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// ===== ANALYTICS =====
+function updateAnalytics() {
+  const total = tasks.length;
+  const done = tasks.filter(t => t.status === "Done").length;
+  const inProgress = tasks.filter(t => t.status === "In Progress").length;
+  const pending = tasks.filter(t => t.status === "Pending").length;
+
+  totalCount.textContent = total;
+  countDone.textContent = done;
+  countInProgress.textContent = inProgress;
+  countPending.textContent = pending;
+
+  const completion = total === 0 ? 0 : Math.round((done / total) * 100);
+  progressFill.style.width = `${completion}%`;
+}
+
+// ===== EVENT LISTENERS =====
+searchInput.addEventListener("input", renderTasks);
+filterStatus.addEventListener("change", renderTasks);
+sortBy.addEventListener("change", renderTasks);
+
+// ===== INIT =====
+renderTasks();
