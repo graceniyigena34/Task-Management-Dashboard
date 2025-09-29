@@ -1,185 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Management Dashboard </title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Management Dashboard</title>
 
-    <!--Tailwind Link  -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100 text-gray-800">
-<div class="max-w-7xl mx-auto p-6">
-<header class="flex items-center justify-between mb-6">
-<h1 class="text-2xl font-semibold">Task Management Dashboard</h1>
-<div class="flex items-center gap-4">
-<div class="text-sm text-gray-600">Local storage only </div>
-<button id="btnClear" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Clear All</button>
-</div>
-</header>
+  <div class="max-w-7xl mx-auto p-4 sm:p-6">
+    <!-- Header -->
+    <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
+      <h1 class="text-2xl font-semibold">Task Management Dashboard</h1>
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+        <div class="text-sm text-gray-600">Local storage only</div>
+        <button id="btnClear" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-yellow-600 w-full sm:w-auto">Clear All</button>
+      </div>
+    </header>
 
-
-<section class="grid grid-cols-1 md:grid-cols-4 gap-6">
-
-    <!--Left controls  -->
-    <div class="md:col-span-1 bg-white p-4 rounded-lg shadow">
+    <!-- Main Section -->
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <!-- Left: Add Task -->
+      <div class="md:col-span-1 bg-white p-4 rounded-lg shadow">
         <h2 class="font-medium mb-3">Add Task</h2>
         <form id="taskForm" class="space-y-3">
+          <div>
+            <label class="text-sm">Title</label>
+            <input id="title" class="w-full mt-1 p-2 border rounded" placeholder="Task title" />
+          </div>
 
+          <div>
+            <label class="text-sm">Description</label>
+            <textarea id="description" class="w-full mt-1 p-2 border rounded" rows="3" placeholder="Optional"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div>
-                <label class="text-sm">Title</label>
-                <input id="title" class="w-full mt-1 p-2 border rounded" placeholder="Task title" />
-            </div>
-
-            <div>
-                <label class="text-sm">Description</label>
-                <textarea id="description" class="w-full mt-1 p-2 border rounded" rows="3" placeholder="Optional"></textarea>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-2"></div>
-                <div>
-                  <label class="text-sm">Due date</label>
-                  <input id="dueDate" type="date" class="w-full mt-1 p-2 border rounded" />
-                </div>
-                  <div>
-                <label class="text-sm">Assignee</label>
-                <input id="assignee" class="w-full mt-1 p-2 border rounded" placeholder="Name" />
-                  </div>
-
+              <label class="text-sm">Due date</label>
+              <input id="dueDate" type="date" class="w-full mt-1 p-2 border rounded" />
             </div>
             <div>
-                <label class="text-sm">Tags (comma separated)</label>
-                <input id="tags" class="w-full mt-1 p-2 border rounded" placeholder="e.g. bug, high-priority" />
+              <label class="text-sm">Assignee</label>
+              <input id="assignee" class="w-full mt-1 p-2 border rounded" placeholder="Name" />
             </div>
+          </div>
 
-            <div>
-                <label class="text-sm">Status</label>
-                <select id="status" class="w-full mt-1 p-2 border rounded">
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Done">Done</option>
+          <div>
+            <label class="text-sm">Tags (comma separated)</label>
+            <input id="tags" class="w-full mt-1 p-2 border rounded" placeholder="e.g. bug, high-priority" />
+          </div>
+
+          <div>
+            <label class="text-sm">Status</label>
+            <select id="status" class="w-full mt-1 p-2 border rounded">
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Done">Done</option>
             </select>
-            </div>
+          </div>
 
-
-<!-- Add Task -->
-         <div class="md:col-span-2 flex gap-2 mt-2">
-          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Task</button>
-
-
-          <!-- Import sample  -->
-          <button type="button" id="btnImportSample" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Import Sample</button>
-        </div>   
+          <!-- Buttons -->
+          <div class="flex flex-col sm:flex-row gap-2 mt-3">
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full sm:w-auto">Add Task</button>
+            <button type="button" id="btnImportSample" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full sm:w-auto">Import Sample</button>
+          </div>
         </form>
       </div>
 
       <!-- Right: Dashboard -->
-<div class="md:col-span-3">
-<div class="bg-white p-4 rounded-lg shadow mb-6">
-<div class="flex items-center justify-between">
-<div class="flex gap-4 items-center">
-<input id="search" placeholder="Search title, description, tags..." class="p-2 border rounded w-72" />
-<select id="filterStatus" class="p-2 border rounded">
-    <option value="All">All</option>
-    <option value="Pending">Pending</option>
-    <option value="In Progress">In Progress</option>
-    <option value="Done">Done</option>
-</select>
+      <div class="md:col-span-3">
+        <div class="bg-white p-4 rounded-lg shadow mb-6">
+          <!-- Search & Filters -->
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex flex-col sm:flex-row gap-2 w-full">
+              <input id="search" placeholder="Search title, description, tags..." class="p-2 border rounded w-full sm:w-64" />
+              <select id="filterStatus" class="p-2 border rounded w-full sm:w-auto">
+                <option value="All">All</option>
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+              </select>
+              <select id="sortBy" class="p-2 border rounded w-full sm:w-auto">
+                <option value="created_desc">Newest</option>
+                <option value="due_asc">Due soon</option>
+                <option value="title_asc">Title A→Z</option>
+              </select>
+            </div>
+            <div class="text-sm text-gray-600">Tasks: <span id="totalCount">0</span></div>
+          </div>
 
-<select id="sortBy" class="p-2 border rounded">
-    <option value="created_desc">Newest</option>
-    <option value="due_asc">Due soon</option>
-    <option value="title_asc">Title A→Z</option>
-</select>
+          <!-- Analytics -->
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-3 border rounded">
+              <div class="text-xs text-gray-500">Completed</div>
+              <div id="countDone" class="text-xl font-semibold">0</div>
+            </div>
+            <div class="p-3 border rounded">
+              <div class="text-xs text-gray-500">In Progress</div>
+              <div id="countInProgress" class="text-xl font-semibold">0</div>
+            </div>
+            <div class="p-3 border rounded">
+              <div class="text-xs text-gray-500">Pending</div>
+              <div id="countPending" class="text-xl font-semibold">0</div>
+            </div>
+          </div>
 
-</div>
-<div class="text-sm text-gray-600">Tasks: <span id="totalCount">0</span></div>
-</div>
-
-
-<!-- Analytics -->
-<div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-<div class="p-3 border rounded">
-<div class="text-xs text-gray-500">Completed</div>
-<div id="countDone" class="text-xl font-semibold">0</div>
-</div>
-<div class="p-3 border rounded">
-<div class="text-xs text-gray-500">In Progress</div>
-<div id="countInProgress" class="text-xl font-semibold">0</div>
-</div>
-<div class="p-3 border rounded">
-<div class="text-xs text-gray-500">Pending</div>
-<div id="countPending" class="text-xl font-semibold">0</div>
-</div>
-</div>
-
-<!-- Progress bar -->
-<div class="mt-10">
-<div class="text-sm text-gray-600 mb-2">Overall completion</div>
-<div class="w-full bg-gray-200 rounded h-4 overflow-hidden">
-<div id="progressFill" class="h-4 rounded bg-green-500" style="width:0%"></div>
-</div>
-</div>
-</div>
-
-
-<!-- Task List -->
-<div id="taskList" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-</div>
-</section>
-</div>
-
-<!-- Optional: Modal for editing tasks -->
-<div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black/50 hidden">
-  <div class="bg-white w-full max-w-lg p-6 rounded shadow">
-    <h3 class="text-xl font-semibold mb-4">Edit Task</h3>
-    <form id="editForm" class="space-y-3">
-      <input id="editId" type="hidden" />
-      <div>
-        <label class="text-sm">Title</label>
-        <input id="editTitle" class="w-full mt-1 p-2 border rounded" />
-      </div>
-      <div>
-        <label class="text-sm">Description</label>
-        <textarea id="editDescription" class="w-full mt-1 p-2 border rounded" rows="3"></textarea>
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <div>
-          <label class="text-sm">Due date</label>
-          <input id="editDueDate" type="date" class="w-full mt-1 p-2 border rounded" />
+          <!-- Progress Bar -->
+          <div class="mt-8">
+            <div class="text-sm text-gray-600 mb-2">Overall completion</div>
+            <div class="w-full bg-gray-200 rounded h-4 overflow-hidden">
+              <div id="progressFill" class="h-4 rounded bg-green-500" style="width:0%"></div>
+            </div>
+          </div>
         </div>
-        <div>
-          <label class="text-sm">Assignee</label>
-          <input id="editAssignee" class="w-full mt-1 p-2 border rounded" />
-        </div>
+
+        <!-- Task List -->
+        <div id="taskList" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
-      <div>
-        <label class="text-sm">Tags</label>
-        <input id="editTags" class="w-full mt-1 p-2 border rounded" placeholder="comma separated" />
-      </div>
-      <div>
-        <label class="text-sm">Status</label>
-        <select id="editStatus" class="w-full mt-1 p-2 border rounded">
-          <option value="Pending">Pending</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Done">Done</option>
-        </select>
-      </div>
-      <div class="flex gap-2 mt-2 justify-end">
-        <button type="button" onclick="closeEditModal()" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancel</button>
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Save</button>
-      </div>
-    </form>
+    </section>
   </div>
-</div>
 
-
-
-    </form>
+  <!-- Edit Modal -->
+  <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black/50 hidden px-4">
+    <div class="bg-white w-full max-w-lg p-6 rounded shadow">
+      <h3 class="text-xl font-semibold mb-4">Edit Task</h3>
+      <form id="editForm" class="space-y-3">
+        <input id="editId" type="hidden" />
+        <div>
+          <label class="text-sm">Title</label>
+          <input id="editTitle" class="w-full mt-1 p-2 border rounded" />
+        </div>
+        <div>
+          <label class="text-sm">Description</label>
+          <textarea id="editDescription" class="w-full mt-1 p-2 border rounded" rows="3"></textarea>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div>
+            <label class="text-sm">Due date</label>
+            <input id="editDueDate" type="date" class="w-full mt-1 p-2 border rounded" />
+          </div>
+          <div>
+            <label class="text-sm">Assignee</label>
+            <input id="editAssignee" class="w-full mt-1 p-2 border rounded" />
+          </div>
+        </div>
+        <div>
+          <label class="text-sm">Tags</label>
+          <input id="editTags" class="w-full mt-1 p-2 border rounded" placeholder="comma separated" />
+        </div>
+        <div>
+          <label class="text-sm">Status</label>
+          <select id="editStatus" class="w-full mt-1 p-2 border rounded">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
+          </select>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2 mt-2 justify-end">
+          <button type="button" onclick="closeEditModal()" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 w-full sm:w-auto">Cancel</button>
+          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full sm:w-auto">Save</button>
+        </div>
+      </form>
     </div>
-</section>
+  </div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
